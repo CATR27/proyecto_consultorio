@@ -39,9 +39,11 @@ export default async function handler(req, res) {
             console.log("Estableciendo cookie de sesión (sin Secure para desarrollo)");
             res.setHeader('Set-Cookie', `token=${token}; Path=/; SameSite=Lax`);
 
-
+            res.setHeader('Set-Cookie', [
+                `token=${token}; Path=/; SameSite=Lax`,
+                `rol=${user.rol}; Path=/; SameSite=Lax`
+            ]);
             
-
             res.status(200).json({ message: 'Login exitoso', rol: user.rol });
         } catch (error) {
             console.error("Error en el proceso de login:", error);

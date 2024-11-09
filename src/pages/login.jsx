@@ -28,6 +28,12 @@ export default function Login() {
             console.log("Login exitoso, redirigiendo al dashboard...");
             console.log("Cookie después de login:", document.cookie); // Verificar si el token está aquí
             router.push('/dashboard');
+
+            if (data.rol === 'administrador') {
+                router.push('/dashboard-admin');
+            } else if (data.rol === 'paciente') {
+                router.push('/dashboard-paciente');
+            }
         }
          else {
             console.error("Error en el login:", data.message);

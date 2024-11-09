@@ -7,26 +7,30 @@ const AuthGuard = ({ children }) => {
     const [isVerified, setIsVerified] = useState(false);
 
     useEffect(() => {
-        const verifyToken = () => {
+        const verifyAccess = () => {
             const token = Cookies.get('token');
-            console.log("AuthGuard: Token encontrado ->", token);
+            const rol = Cookies.get('rol'); // Obtener el rol del usuario
+
             if (token) {
-                // Si el token existe, se permite el acceso
-                setIsVerified(true);
+                // Si el usuario tiene un token, verificar el rol
+                if (rol === 'administrador' && router.pathname !== '/dashboard-admin') {
+                    router.push('/dashboard-admin');
+                } else if (rol === 'paciente' && router.pathname !== '/dashboard-paciente') {
+                    router.push('/dashboard-paciente');
+                } else {
+                    setIsVerified(true); // Usuario tiene acceso a esta ruta
+                }
             } else {
-                // Si no existe el token, se redirige al login
-                console.log("AuthGuard: No se encontró token, redirigiendo al login");
+                // Si no existe el token, redirigir al login
                 router.push('/login');
             }
         };
 
-        verifyToken(); // Verificar token en el montaje
-    }, [router.pathname]); // Ejecutar efecto en cada cambio de ruta
+        verifyAccess(); // Verificar acceso en el montaje del componente
+    }, [router.pathname]);
 
-    // Mientras verifica el token, no muestra nada
     if (!isVerified) return null;
 
-    // Si el usuario está verificado, renderiza el contenido protegido
     return <>{children}</>;
 };
 
