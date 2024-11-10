@@ -41,8 +41,10 @@ export default async function handler(req, res) {
 
             res.setHeader('Set-Cookie', [
                 `token=${token}; Path=/; SameSite=Lax`,
-                `rol=${user.rol}; Path=/; SameSite=Lax`
+                `rol=${user.rol}; Path=/; SameSite=Lax`,
+                `userId=${user.id_usuario}; Path=/; SameSite=Lax`  // Asegúrate de establecer userId
             ]);
+            
             
             res.status(200).json({ message: 'Login exitoso', rol: user.rol });
         } catch (error) {
